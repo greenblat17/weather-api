@@ -16,7 +16,7 @@ import javax.validation.Valid;
 import static com.greenblat.rest.util.FieldError.incorrectFields;
 
 @RestController
-@RequestMapping("/api/v1/sensor")
+@RequestMapping("/api/v1/sensors")
 public class SensorController {
 
     private final SensorValidator sensorValidator;

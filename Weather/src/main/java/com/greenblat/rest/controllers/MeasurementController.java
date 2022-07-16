@@ -1,6 +1,7 @@
 package com.greenblat.rest.controllers;
 
 import com.greenblat.rest.dto.MeasurementDTO;
+import com.greenblat.rest.dto.MeasurementResponse;
 import com.greenblat.rest.models.Measurement;
 import com.greenblat.rest.services.MeasurementsService;
 import com.greenblat.rest.util.MeasurementErrorResponse;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 import static com.greenblat.rest.util.FieldError.incorrectFields;
 
 @RestController
-@RequestMapping("/api/v1/measurement")
+@RequestMapping("/api/v1/measurements")
 public class MeasurementController {
 
     private final MeasurementValidator measurementValidator;
@@ -35,11 +36,13 @@ public class MeasurementController {
     }
 
     @GetMapping()
-    public List<MeasurementDTO> getMeasurements() {
-        return measurementsServices.findAll()
+    public MeasurementResponse getMeasurements() {
+        List<MeasurementDTO> measurementDTOList = measurementsServices.findAll()
                 .stream()
                 .map(measurement -> modelMapper.map(measurement, MeasurementDTO.class))
                 .collect(Collectors.toList());
+
+        return new MeasurementResponse(measurementDTOList);
     }
 
     @PostMapping("/add")

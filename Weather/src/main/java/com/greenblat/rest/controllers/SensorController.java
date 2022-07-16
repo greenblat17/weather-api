@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import static com.greenblat.rest.util.FieldError.incorrectFields;
+
 @RestController
 @RequestMapping("/api/v1/sensor")
 public class SensorController {
@@ -31,6 +33,10 @@ public class SensorController {
     @PostMapping("/registration")
     public ResponseEntity<HttpStatus> registration(@RequestBody @Valid SensorDTO sensorDTO, BindingResult bindingResult) {
         sensorValidator.validate(modelMapper.map(sensorDTO, Sensor.class), bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            incorrectFields(bindingResult);
+        }
 
         sensorsService.save(modelMapper.map(sensorDTO, Sensor.class));
 

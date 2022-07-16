@@ -1,3 +1,5 @@
+import dto.MeasurementDTO;
+import dto.MeasurementResponse;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -31,7 +33,7 @@ public class Client {
 
     public static void registrationSensor(String sensorName) {
 
-        String url = "http://localhost:8080/api/v1/sensor/registration";
+        String url = "http://localhost:8080/api/v1/sensors/registration";
 
         Map<String, Object> jsonData = new HashMap<>();
         jsonData.put("name", sensorName);
@@ -43,7 +45,7 @@ public class Client {
 
     public static void addMeasurements(double value, boolean isRaining, String sensorName) {
 
-        String url = "http://localhost:8080/api/v1/measurement/add";
+        String url = "http://localhost:8080/api/v1/measurements/add";
 
 
         Map<String, Object> jsonData = new HashMap<>();
@@ -77,16 +79,18 @@ public class Client {
 
     public static void getTemperature() {
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8080/api/v1/measurement";
+        String url = "http://localhost:8080/api/v1/measurements";
 
-        List response = restTemplate.getForObject(url, List.class);
+        MeasurementResponse response = restTemplate.getForObject(url, MeasurementResponse.class);
 
-        if (response == null) {
+        if (response == null || response.getMeasurements() == null) {
             return;
         }
 
-        for (int i = 0; i < response.size(); i++) {
-            System.out.println(response.get(i));
+        List<MeasurementDTO> measurements = response.getMeasurements();
+
+        for (MeasurementDTO measurement : measurements) {
+            System.out.println(measurement);
         }
     }
 

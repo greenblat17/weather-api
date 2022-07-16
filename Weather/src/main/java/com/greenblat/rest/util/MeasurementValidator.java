@@ -30,8 +30,11 @@ public class MeasurementValidator implements Validator {
     public void validate(Object target, Errors errors) {
         Measurement measurement = (Measurement) target;
 
+        if (measurement.getSensor() == null)
+            return;
+
         Optional<Sensor> searchSensor = sensorsService.findByName(measurement.getSensor().getName());
-        if (!searchSensor.isPresent()) {
+        if (searchSensor.isEmpty()) {
             errors.rejectValue("sensor", "", "Sensor with the same name doesn't exist");
         }
     }
